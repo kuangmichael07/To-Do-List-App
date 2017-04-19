@@ -175,7 +175,7 @@ var RecipeAdd = React.createClass({
 
 // Update function to display all the items
 function update() {
-  localStorage.setItem("items", JSON.stringify(items));
+  
   var rows = [];
   for (var i = 0; i < items.length; i++) {
     rows.push(React.createElement(
