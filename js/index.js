@@ -1,13 +1,13 @@
 "use strict";
 
-/*var Panel = ReactBootstrap.Panel,
+var Panel = ReactBootstrap.Panel,
     Accordion = ReactBootstrap.Accordion;
 var Button = ReactBootstrap.Button,
     Input = ReactBootstrap.Input;
 var ButtonToolbar = ReactBootstrap.ButtonToolbar;
 var Modal = ReactBootstrap.Modal;
 var ListGroup = ReactBootstrap.ListGroup,
-    ListGroupItem = ReactBootstrap.ListGroupItem;*/
+    ListGroupItem = ReactBootstrap.ListGroupItem;
 
 // Load Items or set default Items
 var items = [{ title: "Grocessary", content: "Beverage 15% Off in Kroger" }, { title: "Workout", content: "Marathon training: Week  5, Day 4" }, { title: "Buy books", content: "Find 'Learning React O'Reilly'" }],
