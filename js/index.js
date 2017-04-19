@@ -10,7 +10,7 @@ var ListGroup = ReactBootstrap.ListGroup,
     ListGroupItem = ReactBootstrap.ListGroupItem;
 
 // Load Items or set default Items
-var items = [{ title: "Grocessary", content: "Beverage 15% Off in Kroger" }, { title: "Workout", content: "Marathon training: Week  5, Day 4" }, { title: "Buy books", content: "Find 'Learning React O'Reilly'" }],
+var items = [{ title: "Grocery", content: "Beverage 15% Off in Kroger" }, { title: "Workout", content: "Marathon training: Week  5, Day 4" }, { title: "Buy books", content: "Find 'Learning React O'Reilly'" }],
     globalTitle = "",
     globalContent = ""; // Define global title and content
 
