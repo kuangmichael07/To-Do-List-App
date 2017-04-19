@@ -1,7 +1,7 @@
 
 
 <!--
-Copyright (c) 2017 by Michael Kuang (http://codepen.io/kuangmichael07/pen/KmVwVy)
+Copyright (c) 2017 by Michael Kuang (http://codepen.io/kuangmichael07/pen/OmMPvg)
 
 
 Fork of an original work by freeCodeCamp (http://codepen.io/freeCodeCamp/pen/xVXWag)

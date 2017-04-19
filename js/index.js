@@ -6,18 +6,17 @@ var Button = ReactBootstrap.Button,
     Input = ReactBootstrap.Input;
 var ButtonToolbar = ReactBootstrap.ButtonToolbar;
 var Modal = ReactBootstrap.Modal;
-var OverlayTrigger = ReactBootstrap.OverlayTrigger;
 var ListGroup = ReactBootstrap.ListGroup,
     ListGroupItem = ReactBootstrap.ListGroupItem;
 
-// Load Recipe Items or set default Recipe Items
-var recipes = typeof localStorage["recipeBook"] != "undefined" ? JSON.parse(localStorage["recipeBook"]) : [{ title: "Pumpkin Pie", ingredients: ["Pumpkin Puree", "Sweetened Condensed Milk", "Eggs", "Pumpkin Pie Spice", "Pie Crust"] }, { title: "Spaghetti", ingredients: ["Noodles", "Tomato Sauce", "(Optional) Meatballs"] }, { title: "Onion Pie", ingredients: ["Onion", "Pie Crust", "Sounds Yummy right?"] }],
+// Load Items or set default Items
+var items = [{ title: "Grocessary", content: "Beverage 15% Off in Kroger" }, { title: "Workout", content: "Marathon training: Week  5, Day 4" }, { title: "Buy books", content: "Find 'Learning React O'Reilly'" }],
     globalTitle = "",
-    globalIngredients = []; // Define global title and ingredients
+    globalContent = ""; // Define global title and content
 
-// RecipeBook class. This holds all recipes.
-var RecipeBook = React.createClass({
-  displayName: "RecipeBook",
+// ToDoList class. This holds all items.
+var ToDoList = React.createClass({
+  displayName: "ToDoList",
 
   render: function render() {
     return React.createElement(
@@ -32,17 +31,17 @@ var RecipeBook = React.createClass({
   }
 });
 
-// Recipe class. This is the display for a recipe in RecipeBook
-var Recipe = React.createClass({
-  displayName: "Recipe",
+// Item class. This is the display for a item in ToDoList
+var Item = React.createClass({
+  displayName: "Item",
 
   remove: function remove() {
-    recipes.splice(this.props.index, 1);
+    items.splice(this.props.index, 1);
     update();
   },
   edit: function edit() {
     globalTitle = this.props.title;
-    globalIngredients = this.props.ingredients;
+    globalContent = this.props.content;
     document.getElementById("show").click();
   },
   render: function render() {
@@ -52,10 +51,14 @@ var Recipe = React.createClass({
       React.createElement(
         "h4",
         { className: "text-center" },
-        "Ingredients"
+        "What to Do?"
       ),
       React.createElement("hr", null),
-      React.createElement(IngredientList, { ingredients: this.props.ingredients }),
+      React.createElement(
+        "p",
+        null,
+        this.props.content
+      ),
       React.createElement(
         ButtonToolbar,
         null,
@@ -74,26 +77,6 @@ var Recipe = React.createClass({
   }
 });
 
-// IngredientList class. This lists all ingredients for a Recipe
-var IngredientList = React.createClass({
-  displayName: "IngredientList",
-
-  render: function render() {
-    var ingredientList = this.props.ingredients.map(function (ingredient) {
-      return React.createElement(
-        ListGroupItem,
-        null,
-        ingredient
-      );
-    });
-    return React.createElement(
-      ListGroup,
-      null,
-      ingredientList
-    );
-  }
-});
-
 // RecipeAdd class. This contains the Modal and Add Recipe button
 var RecipeAdd = React.createClass({
   displayName: "RecipeAdd",
@@ -103,34 +86,34 @@ var RecipeAdd = React.createClass({
   },
   close: function close() {
     globalTitle = "";
-    globalIngredients = [];
+    globalContent = "";
     this.setState({ showModal: false });
   },
   open: function open() {
     this.setState({ showModal: true });
-    if (document.getElementById("title") && document.getElementById("ingredients")) {
+    if (document.getElementById("title") && document.getElementById("content")) {
       $("#title").val(globalTitle);
-      $("#ingredients").val(globalIngredients);
+      $("#content").val(globalContent);
       if (globalTitle != "") {
-        $("#modalTitle").text("Edit Recipe");
-        $("#addButton").text("Edit Recipe");
+        $("#modalTitle").text("Edit What to Do");
+        $("#addButton").text("Finish Edit");
       }
     } else requestAnimationFrame(this.open);
   },
   add: function add() {
     var title = document.getElementById("title").value;
-    var ingredients = document.getElementById("ingredients").value.split(",");
+    var content = document.getElementById("content").value;
     var exists = false;
-    for (var i = 0; i < recipes.length; i++) {
-      if (recipes[i].title === title) {
-        recipes[i].ingredients = ingredients;
+    for (var i = 0; i < items.length; i++) {
+      if (items[i].title === title) {
+        items[i].content = content;
         exists = true;
         break;
       }
     }
     if (!exists) {
       if (title.length < 1) title = "Untitled";
-      recipes.push({ title: title, ingredients: document.getElementById("ingredients").value.split(",") });
+      items.push({ title: title, content: content });
     }
     update();
     this.close();
@@ -147,7 +130,7 @@ var RecipeAdd = React.createClass({
           onClick: this.open,
           id: "show"
         },
-        "Add Recipe"
+        "Add a New Target"
       ),
       React.createElement(
         Modal,
@@ -158,7 +141,7 @@ var RecipeAdd = React.createClass({
           React.createElement(
             Modal.Title,
             { id: "modalTitle" },
-            "Add a Recipe"
+            "Add a New Target"
           )
         ),
         React.createElement(
@@ -167,8 +150,8 @@ var RecipeAdd = React.createClass({
           React.createElement(
             "form",
             null,
-            React.createElement(Input, { type: "text", label: "Recipe", placeholder: "Recipe Name", id: "title" }),
-            React.createElement(Input, { type: "textarea", label: "Ingredients", placeholder: "Enter Ingredients,Separated,By Commas", id: "ingredients" })
+            React.createElement(Input, { type: "text", label: "What to Do?", placeholder: "a new target", id: "title" }),
+            React.createElement(Input, { type: "textarea", label: "Content", placeholder: "notes", id: "content" })
           )
         ),
         React.createElement(
@@ -177,7 +160,7 @@ var RecipeAdd = React.createClass({
           React.createElement(
             Button,
             { onClick: this.add, bsStyle: "primary", id: "addButton" },
-            "Add Recipe"
+            "Add a New Target"
           ),
           React.createElement(
             Button,
@@ -190,20 +173,20 @@ var RecipeAdd = React.createClass({
   }
 });
 
-// Update function to display all the recipes
+// Update function to display all the items
 function update() {
-  localStorage.setItem("recipeBook", JSON.stringify(recipes));
+  localStorage.setItem("items", JSON.stringify(items));
   var rows = [];
-  for (var i = 0; i < recipes.length; i++) {
+  for (var i = 0; i < items.length; i++) {
     rows.push(React.createElement(
       Panel,
-      { header: recipes[i].title, eventKey: i, bsStyle: "success" },
-      React.createElement(Recipe, { title: recipes[i].title, ingredients: recipes[i].ingredients, index: i })
+      { header: items[i].title, eventKey: i, bsStyle: "success" },
+      React.createElement(Item, { title: items[i].title, content: items[i].content, index: i })
     ));
   }
-  ReactDOM.render(React.createElement(RecipeBook, { data: rows }), document.getElementById("container"));
+  ReactDOM.render(React.createElement(ToDoList, { data: rows }), document.getElementById("container"));
 }
 
 // Render the add button (and modal)
-ReactDOM.render(React.createElement(RecipeAdd, null), document.getElementById("button"));
 update(); // Initially render the recipe book
+ReactDOM.render(React.createElement(RecipeAdd, null), document.getElementById("button"));
